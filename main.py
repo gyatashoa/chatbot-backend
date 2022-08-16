@@ -21,6 +21,8 @@ WORDS = pickle.load(open('./data/words.pkl','rb'))
 CLASSES = pickle.load(open('./data/classes.pkl','rb'))
 
 lemmatizer = WordNetLemmatizer()
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 
  
