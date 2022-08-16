@@ -15,7 +15,7 @@ from tensorflow.keras.models import load_model
 
 app = FastAPI()
 
-MODEL = load_model(os.path.join(os.curdir,'./data/chatbot_model.h5'))
+MODEL = load_model(os.path.join(os.curdir,'./data/chatbot_model'))
 
 WORDS = pickle.load(open('./data/words.pkl','rb'))
 CLASSES = pickle.load(open('./data/classes.pkl','rb'))
