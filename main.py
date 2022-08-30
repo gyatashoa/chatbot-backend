@@ -18,7 +18,7 @@ app = FastAPI()
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('punkt')
-MODEL = load_model(os.path.join(os.curdir,'./saved_models/chatbot_model'))
+MODEL = load_model(os.path.join(os.curdir,'./saved_models/chatbot_model_v2'))
 
 WORDS = pickle.load(open('./data/words.pkl','rb'))
 CLASSES = pickle.load(open('./data/classes.pkl','rb'))
@@ -54,7 +54,7 @@ def get_numerical_representation_of_words(sentence):
 def predict(sentence):
     rep = get_numerical_representation_of_words(sentence)
     prediction = MODEL.predict(np.array([rep]))[0]
-    THRESHOLD  = 0.25
+    THRESHOLD  = 0.0025
     results = [[i,r] for i,r in enumerate(prediction) if r > THRESHOLD]
     results.sort(key=lambda x: x[1],reverse=True)
     return_list = []
