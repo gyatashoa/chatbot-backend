@@ -89,7 +89,7 @@ async def get_answer_v3(data:Question):
 
 def keep_server_alive():
     while True:
-        requests.get('https://chat-bot-99.herokuapp.com/pin')
+        requests.get('https://chat-bot-99.herokuapp.com/')
         sleep(120)
 
 
