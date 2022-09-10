@@ -63,11 +63,11 @@ async def ping():
     return 'ping'
 
 
-@app.post('/add_quest')
-async def ping(ques:UnasweredQuestion):
-    ques.createdAt = datetime.now()
-    save_question_to_db(ques)
-    return {'msg':'saved successfully'}
+# @app.post('/add_quest')
+# async def ping(ques:UnasweredQuestion):
+#     ques.createdAt = datetime.now()
+#     save_question_to_db(ques)
+#     return {'msg':'saved successfully'}
 
 
 @app.post('/question')
