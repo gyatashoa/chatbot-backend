@@ -42,7 +42,7 @@ def predict(sentence):
 def predict_v3(sentence):
     rep = get_numerical_representation_of_words(sentence,WORDS=WORDS_V3)
     prediction = MODEL_V3.predict(np.array([rep]))[0]
-    THRESHOLD  = 0.0025
+    THRESHOLD  = 0.45
     results = [[i,r] for i,r in enumerate(prediction) if r > THRESHOLD]
     if len(results) == 0:
         #TODO: connect to mongo db here and save question
