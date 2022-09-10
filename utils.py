@@ -1,10 +1,18 @@
+from datetime import datetime
+import os
 from pydantic import BaseModel
+from pymongo import MongoClient
 import nltk
 from nltk.stem import WordNetLemmatizer
 import numpy as np
 import random
 import json
+from dotenv import load_dotenv
 
+
+class UnasweredQuestion(BaseModel):
+    question:str
+    createdAt:datetime
 
 class Answer(BaseModel):
     response:str
@@ -42,7 +50,15 @@ def get_numerical_representation_of_words(sentence,WORDS):
 #     return np.array(result)
 
 
-
+def save_question_to_db(ques: UnasweredQuestion):
+    load_dotenv()
+    DB_URL = os.environ['DB_URL']
+    DB_NAME = os.environ['DB_NAME']
+    COLLECTION_NAME = os.environ['COLLECTION_NAME']
+    with MongoClient(DB_URL) as client:
+        col = client[DB_NAME][COLLECTION_NAME]
+        res = col.insert_one(ques.dict())
+        return res
 
 
 

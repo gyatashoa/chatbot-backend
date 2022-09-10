@@ -1,3 +1,4 @@
+from datetime import datetime
 import http
 from time import sleep, time
 from fastapi import FastAPI
@@ -9,7 +10,7 @@ import nltk
 import requests
 
 
-from utils import Answer,Question,get_response,get_response_v3,get_numerical_representation_of_words
+from utils import Answer,Question, UnasweredQuestion,get_response,get_response_v3,get_numerical_representation_of_words,save_question_to_db
 
 from tensorflow.keras.models import load_model
 
@@ -43,6 +44,10 @@ def predict_v3(sentence):
     prediction = MODEL_V3.predict(np.array([rep]))[0]
     THRESHOLD  = 0.0025
     results = [[i,r] for i,r in enumerate(prediction) if r > THRESHOLD]
+    if len(results) == 0:
+        #TODO: connect to mongo db here and save question
+        save_question_to_db(UnasweredQuestion(question=sentence,createdAt=datetime.now()))
+        return None
     results.sort(key=lambda x: x[1],reverse=True)
     return_list = []
     for r in results:
@@ -58,6 +63,12 @@ async def ping():
     return 'ping'
 
 
+@app.post('/add_quest')
+async def ping(ques:UnasweredQuestion):
+    ques.createdAt = datetime.now()
+    save_question_to_db(ques)
+    return {'msg':'saved successfully'}
+
 
 @app.post('/question')
 async def get_answer(data:Question):
@@ -69,7 +80,10 @@ async def get_answer(data:Question):
 @app.post('/v3/question')
 async def get_answer_v3(data:Question):
     sentence = data.question; 
-    response = get_response_v3(predict_v3(sentence)[0]['intent'])
+    res = predict_v3(sentence)
+    if res is None:
+        return {'Error' : "Model couldn't find any response to question"}
+    response = get_response_v3(res[0]['intent'])
     return Answer(response=response)
 
 

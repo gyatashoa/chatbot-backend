@@ -4,3 +4,6 @@ uvicorn
 numpy
 pydantic
 nltk
+pymongo
+python-dotenv
+pymongo[srv]
